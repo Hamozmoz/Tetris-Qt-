@@ -9,6 +9,7 @@ class TetriminoManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(GameMatrix* GameGrid READ getGameGrid CONSTANT)
+    Q_PROPERTY(int Score READ readScore NOTIFY ScoreChanged)
 public:
     enum Direction: uint8_t{
     Null,
@@ -22,11 +23,13 @@ public:
     };
 
     Q_ENUM(Direction)
+    int Score{0};
     bool FastDrop{false};
     bool InstantDrop{false};
     Tetrimino CurrentTetrimino ;
     static TetriminoManager& Instance();
     GameMatrix* getGameGrid();
+    int readScore();
    Q_INVOKABLE  void moveTetrimino(Direction dir);
    Q_INVOKABLE   void addTetriminoToGameGrid();
    Q_INVOKABLE void moveDown();
@@ -35,6 +38,8 @@ public:
    Q_INVOKABLE void changeInstantDrop();
    Q_INVOKABLE void changeFastDropToFalse();
    Q_INVOKABLE void rotateTetrimino();
+   signals :
+   void ScoreChanged();
  private:
    void ClearLine();
      void WallKick(Tetrimino &TetriminoToTest,Position* PositionToMove = nullptr, Position* PositionToMove2 = nullptr);
@@ -52,7 +57,6 @@ Rotation NextRotation();
  std::random_device SeedGen;
     uint32_t Seed = SeedGen();
  inline void RestartTetriminoTimer();
-     void DoDumbStuff();
  void rotateTetrimino(Rotation GoalRotation);
 void SetTetrimino();
 std::array<TetriminoType,7> TetriminoBag;
