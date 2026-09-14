@@ -58,9 +58,16 @@ Keys.onReleased: (event)=> {
                  }
 
 Rectangle{
+    objectName: "Score Text "
         anchors.top:  gamegridroot.top
         anchors.left: gamegridroot.right
+
     Text{
+        width : parent.width *3
+        height: parent.height
+      font.family: "Consolas"
+      font.pixelSize: window.width /43 +3
+
         text : "Score : " + TetriminoManager.Score
         color : "white"
     }
