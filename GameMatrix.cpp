@@ -1,35 +1,14 @@
 #include "GameMatrix.h"
 #include <iostream>
 
-
-GameMatrix::GameMatrix()
-{
-#ifndef NDEBUG
-    connect(this,&QAbstractListModel::dataChanged,this,&GameMatrix::PrintMatrix);
-    std::cout << "Game Launched In Debug Mode " << std::endl;
-#endif
-    Matrix.fill(Color::Null);
-}
+GameMatrix::GameMatrix() {}
 
 const int GameMatrix::GetIndex(int row, int col) const {
     int index = row * Columns + col ;
-#ifndef NDEBUG
     if(index >= Matrix.size() ){
-        std::cout << "Index Greater Than GridSize ! Returning 0 ...\n";
+        std::cout << "Index Greater Than GridSize ! Returning 1 ...\n";
         return 0;
     }
-#endif
-    return index;
-}
-
-const int GameMatrix::GetIndex(Position position) const {
-    int index = position.row * Columns + position.column;
-#ifndef NDEBUG
-    if(index >= Matrix.size() ){
-        std::cout << "Index Greater Than GridSize ! Returning 0 ...\n";
-        return 0;
-    }
-#endif
     return index;
 }
 
@@ -41,7 +20,7 @@ QVariant GameMatrix::data(const QModelIndex &index, int role) const{
     if(index.row() >= Matrix.size() || index.row() < 0) {
         return QVariant();
     }
-    if(role == roles::color) {return Matrix[index.row()+ 20];}
+    if(role == roles::color) {return Matrix[index.row()];}
     return QVariant() ;
 }
 
@@ -56,55 +35,5 @@ int GameMatrix::getColumns() const{
 }
 
 int GameMatrix::getRows() const{
-    return Rows -2;
-}
-
- GameMatrix::Color &GameMatrix::operator[](Position Pos)   {
-    return Matrix[Pos.row * Columns + Pos.column];
-
-}
-
-GameMatrix::Color &GameMatrix::operator[](int index){
-    return Matrix[index];
-}
-
-void GameMatrix::getColor(int index,Color col){
-    Matrix[index] = col;
-    QModelIndex Indice = createIndex(index,0);
-    dataChanged(Indice,Indice);
-}
-
-//Notifies Qml That The Tiles Between The FirstPosition And The LastPosition Were Modified
-void GameMatrix::DataChanged(Position FirstPosition, Position Lastposition){
-
-    if(FirstPosition.row -2 < 0){
-        FirstPosition.row = 0;
-    }else{
-        FirstPosition.row -=2;
-    }
-    if(Lastposition.row -2 < 0){
-        Lastposition.row = 0;}
-    else{
-        Lastposition.row -=2;
-    }
-    QModelIndex First = createIndex(GetIndex(FirstPosition),0);
-    QModelIndex Last = createIndex(GetIndex(Lastposition),0);
-    dataChanged(First,Last);
-}
-
-void GameMatrix::PrintMatrix(){
-    std::cout << "\033[2J\033[H";
-    for(int row {0};row < Rows;row++){
-        for(int col {0}; col <Columns; col++){
-            if(Matrix[GetIndex(row,col)] != Color::Null){
-                std::cout << "C ";
-            }else {
-                std::cout << "N ";
-            }
-
-        }
-
-        std::cout <<std::endl ;
-    }
-
+    return Rows;
 }

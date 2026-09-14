@@ -2,15 +2,30 @@
 #define GAMEMANAGER_H
 #include <QObject>
 #include <QQmlEngine>
-#include "GameMatrix.h"
 class GameManager: public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QAbstractListModel* GameGrid READ getGameGrid CONSTANT)
+    Q_PROPERTY(GameState CurrentGameState READ GetGameState NOTIFY GameStateChanged)
 public:
+    enum GameState{
+        OpeningScreen,
+        GameRunning
+    };
+    Q_ENUM(GameState)
+    GameState CurrentGameState = GameState::OpeningScreen;
    static GameManager& Instance ();
-    GameMatrix GameGrid;
-    GameMatrix* getGameGrid();
+    GameState GetGameState(){
+        return CurrentGameState;
+    }
+    void ChangeGameState(GameState State){
+        if(CurrentGameState != State){
+            CurrentGameState = State;
+            emit GameStateChanged();
+        }
+    }
+signals :
+void GameStateChanged();
+
 private:
     GameManager();
 };
