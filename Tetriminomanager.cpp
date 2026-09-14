@@ -100,6 +100,10 @@ GameMatrix *TetriminoManager::getGameGrid(){
     return &GameGrid;
 }
 
+int TetriminoManager::readScore(){
+    return Score;
+}
+
 void TetriminoManager::startGame(){
     InitTetriminoBag();
     addTetriminoToGameGrid();
@@ -125,38 +129,36 @@ void TetriminoManager::changeFastDropToFalse(){
 }
 
 void TetriminoManager::ClearLine(){
-    Position FirstPosition;
-    Position LastPosition{Rows-1,Columns-1};
-    int ClearedLines{0};
-    bool MovedLines {false};
-    for(int row =LineStates.size() -1;row > 1;--row){
-        if(LineStates[row] != LineCleared){
-            FirstPosition.row = row+2;
-        }
+    int ScoreToAdd{0};
+   int LinesToClear = 0;
+    bool LinesCleared {false};
+    for(int row = LineStates.size() -1; row>1;--row){
+       if(LineStates[row] == LineCleared){
+            ++LinesToClear;
+           for(int col = 0 ; col < Columns; ++col){
+                GameGrid[GameGrid.GetIndex(row+2,col)] = GameMatrix::Null;
+           }
+           if(LinesCleared){
+                LinesCleared = false;
+               ScoreToAdd += LinesToClear * 100;
+               LinesToClear = 0;
+           }
+       }else{
+           if(LinesToClear > 0){
+               if(LineStates[row] != LineEmpty){
+               for(int col = 0;col < Columns ; ++col){
+                   std::swap(GameGrid[GameGrid.GetIndex(row+2,col)],GameGrid[GameGrid.GetIndex(row+2+LinesToClear,col)]);
 
+               }}
+               LinesCleared = true;
+           }
+       }
 
-
-
-            if(LineStates[row] == LineCleared){
-                ++ClearedLines;
-                if(MovedLines){
-                    MovedLines = false;
-                    ClearedLines = 0;
-                }
-                for(int col {0}; col < Columns; ++col ){
-           GameGrid[GameGrid.GetIndex(row+2,col)] = GameMatrix::Null;
-            }
-            }else {
-                if(ClearedLines >0){
-                for(int col {0}; col <Columns; ++col){
-                    std::swap(GameGrid[GameGrid.GetIndex(row+2,col)],GameGrid[GameGrid.GetIndex(row+ClearedLines+2,col)]);
-                }
-                MovedLines = true;
-                }
-            }
-            }
-    GameGrid.DataChanged(FirstPosition,LastPosition);
-
+    }
+    ScoreToAdd += LinesToClear * 100;
+    Score += ScoreToAdd;
+    emit ScoreChanged();
+    GameGrid.DataChanged({0,0},{Rows-1,Columns-1});
 }
 
 void TetriminoManager::WallKick(Tetrimino &TetriminoToTest, Position *PositionToMove , Position *PositionToMove2){
@@ -215,24 +217,29 @@ Rotation TetriminoManager::NextRotation(){
 }
 
 void TetriminoManager::CheckLines(){
-        bool rowempty {true};
-    for(int row {0}; row< Rows-2 ;row++){
-        LineStates[row] = LineCleared;
-        rowempty = true;
-        for(int col{0}; col < Columns; col++){
-
-             if(GameGrid[GameGrid.GetIndex(row+2,col)] >3){
-                LineStates[row] = LineUncleared;
-             }else{
-                 rowempty = false;
-             }
-             }
-        if(rowempty){
-                 LineStates[row] = LineEmpty;
+    int ColoredTilesInLine {0};
+    char ClearedLineFound {'n'};
+    for(int row {0}; row< LineStates.size() ; ++row){
+        ColoredTilesInLine = 0;
+        for(int col{0}; col < Columns; ++col){
+            if(GameGrid[GameGrid.GetIndex(row+2,col)] < GameMatrix::Null){
+                ++ColoredTilesInLine;
+            }
         }
+        if(ColoredTilesInLine == 0){
+            LineStates[row] = LineEmpty;
+        }else if(ColoredTilesInLine < Columns){
+            LineStates[row] = LineUncleared;
+        }else {
+            LineStates[row] = LineCleared;
+            ClearedLineFound = 'y';
         }
-    ClearLine();
     }
+    if(ClearedLineFound == 'y'){
+        ClearLine();
+    }
+
+}
 
 
 
@@ -290,12 +297,15 @@ const bool TetriminoManager::CheckCanMoveDown(){
 void TetriminoManager::InitTetriminoBag()
 {
     static std::mt19937 TetriminoBagGen(Seed);
-    TetriminoBag = {TetriminoType::IPiece,TetriminoType::LPiece,TetriminoType::OPiece,
+    TetriminoBag =     {TetriminoType::IPiece,TetriminoType::LPiece,TetriminoType::OPiece,
                     TetriminoType::JPiece,TetriminoType::SPiece,TetriminoType::TPiece,TetriminoType::ZPiece};
 
     std::shuffle(TetriminoBag.begin(),TetriminoBag.end(),TetriminoBagGen);
 }
 
+
+//{TetriminoType::IPiece,TetriminoType::IPiece,TetriminoType::IPiece,
+// TetriminoType::IPiece,TetriminoType::IPiece,TetriminoType::IPiece,TetriminoType::IPiece};
 bool TetriminoManager::CanRotate(const Tetrimino &tetrimino){
     for(auto pos : tetrimino.Positions) {
         if(pos.row > Rows ||GameGrid[pos] < 4 ){
@@ -349,25 +359,6 @@ void TetriminoManager::RestartTetriminoTimer(){
     }
 }
 
-void TetriminoManager::DoDumbStuff(){
-    for(int line {0} ; line < LineStates.size() ; line ++){
-        if(LineStates[line] == LineEmpty){
-            int LinesToMove{1};
-            int RowToStartMoving{0};
-            for(int row {line+1};LineStates[row] == LineEmpty; row++){
-                LinesToMove++;
-                RowToStartMoving = row;
-            }
-            for(;RowToStartMoving<Rows-2;RowToStartMoving++){
-                for(int col{0}; col< Columns;col++) {
-                    std::swap(GameGrid[GameGrid.GetIndex(RowToStartMoving,col)],GameGrid[GameGrid.GetIndex(line,col)]);
-
-                }
-            }
-        }
-    }
-
-}
 void TetriminoManager::rotateTetrimino(Rotation GoalRotation= Rotation::None)
 {
 
