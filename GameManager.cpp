@@ -5,8 +5,5 @@ GameManager &GameManager::Instance() {
     return manager;
 }
 
-GameMatrix *GameManager::getGameGrid(){
-    return &GameGrid;
-}
 
 GameManager::GameManager() {}
