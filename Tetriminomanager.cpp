@@ -1,10 +1,8 @@
 #include "Tetriminomanager.h"
-#include <iostream>
 #include "GameManager.h"
 //#define DumbMode
 TetriminoManager &TetriminoManager::Instance(){
     static TetriminoManager manager;
-    std::cout << "Tetrimino Manager Instance Created " << std::endl;
     return manager;
 }
 

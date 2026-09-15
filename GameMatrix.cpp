@@ -6,7 +6,6 @@ GameMatrix::GameMatrix()
 {
 #ifndef NDEBUG
     connect(this,&QAbstractListModel::dataChanged,this,&GameMatrix::PrintMatrix);
-    std::cout << "Game Launched In Debug Mode " << std::endl;
 #endif
     Matrix.fill(Color::Null);
 }
