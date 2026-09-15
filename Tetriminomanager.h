@@ -42,7 +42,7 @@ public:
    void ScoreChanged();
  private:
    void ClearLine();
-     void WallKick(Tetrimino &TetriminoToTest,Position* PositionToMove = nullptr, Position* PositionToMove2 = nullptr);
+     void WallKick(Tetrimino &TetriminoToTest);
 Rotation NextRotation();
    void CheckLines();
      const bool CheckCanMoveDown(const Tetrimino& tetrimino );

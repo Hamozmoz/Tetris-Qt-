@@ -161,7 +161,23 @@ void TetriminoManager::ClearLine(){
     GameGrid.DataChanged({0,0},{Rows-1,Columns-1});
 }
 
-void TetriminoManager::WallKick(Tetrimino &TetriminoToTest, Position *PositionToMove , Position *PositionToMove2){
+void TetriminoManager::WallKick(Tetrimino &TetriminoToTest){
+
+    bool OutOfVerticalBounds{false};
+    for(auto Pos: TetriminoToTest.Positions){
+
+        if(Pos.row >= Rows || GameGrid[Pos] < GameMatrix::Null){
+            OutOfVerticalBounds = true;
+            break;
+        }
+
+    }
+    if(OutOfVerticalBounds){
+        for(auto& Pos : TetriminoToTest.Positions){
+            --Pos.column;
+        }
+    }
+
     bool OutOfHorizontalBounds{true};
     while(OutOfHorizontalBounds) {
     for(int i{0}; i< TetriminoToTest.Positions.size();i++){
@@ -178,12 +194,8 @@ void TetriminoManager::WallKick(Tetrimino &TetriminoToTest, Position *PositionTo
     for(auto& Pos : TetriminoToTest.Positions){
         ++Pos.column;
     }
-    if(PositionToMove ){
-        ++PositionToMove->column;
-    }
-    if(PositionToMove2){
-        ++PositionToMove2->column;
-    }
+
+
     }
     OutOfHorizontalBounds = true;
 
@@ -202,13 +214,12 @@ void TetriminoManager::WallKick(Tetrimino &TetriminoToTest, Position *PositionTo
         for(auto& Pos : TetriminoToTest.Positions){
             --Pos.column;
         }
-        if(PositionToMove){
-            --PositionToMove->column;
-        }
-        if(PositionToMove2){
-            --PositionToMove2->column;
-        }
+
+
     }
+
+
+
 
 }
 Rotation TetriminoManager::NextRotation(){
