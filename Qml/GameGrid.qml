@@ -1,7 +1,7 @@
 import QtQuick
 import Tetris
 FocusScope {
-
+focus : true
     id : gamegridroot
 width : window.width /3
 height: window.height

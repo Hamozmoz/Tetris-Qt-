@@ -12,19 +12,23 @@ Rectangle {
    height : window.height
     color : "#282A36"
 }
-
-GameGrid{
+Loader{
+    active:GameManager.CurrentGameState === GameManager.GameRunning? true:false
     focus: GameManager.CurrentGameState === GameManager.GameRunning? true:false
+    sourceComponent:
+GameGrid{
+    id: gameGrid
 
 }
-Item {
-    id : openingScreenInputHandler
+}
+Loader{
     focus: GameManager.CurrentGameState === GameManager.OpeningScreen? true : false
+    active: GameManager.CurrentGameState === GameManager.OpeningScreen? true : false
+    sourceComponent:
+OpeningScreen {
+    id : openingScreen
 
-    Keys.onSpacePressed:  {
-        TetriminoManager.startGame()
-    }
-
+}
 }
 }
 
