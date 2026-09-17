@@ -30,5 +30,12 @@ OpeningScreen {
 
 }
 }
+PauseScreen{
+active : GameManager.GamePaused?true:false
+width : window.width
+height : window.height
 }
+}
+
+
 
