@@ -1,5 +1,5 @@
 import QtQuick
-
+import Tetris
 FocusScope {
     id:openingScreenRoot
     focus : true
@@ -7,6 +7,7 @@ FocusScope {
    objectName: "OpeningScreen"
    Rectangle{
        id: blackBackground
+
     width:  window.width
     height: window.height
     color : "black"
@@ -67,44 +68,37 @@ SequentialAnimation{
 
 }
 }
-Text{
-    id: instructionText
-text : "Please Press Space To Start ! "
-color : "white"
-x : titleText.x + blackBackground.screenPieceWidth
-y : blackBackground.screenPieceHeight * 26
-font.pixelSize: window.width / 37 + 3
 
-SequentialAnimation{
-    running : true
-    loops: Animation.Infinite
-    PropertyAnimation{
-       property : "opacity"
-       from: 1
-       to : 0
-       target: instructionText
-       duration: 500
-    }
-    PropertyAnimation{
-       property : "opacity"
-       from: 0
-       to : 1
-       target: instructionText
-       duration: 500
-    }
+Button{
+    id : startButton
+ text: "Start"
+anchors.horizontalCenter: blackBackground.horizontalCenter
+y : blackBackground.screenPieceHeight *22
+onButtonClicked: {
+    TetriminoManager.startGame()
+}
+
+}
+Button{
+active: GameManager.DebugMode? true:false
+x : 0
+anchors.bottom: blackBackground.bottom
+buttonColor:  TetriminoManager.DebugMode? "red" : "black"
+text : "Debug"
+onButtonReleased: {
+
+TetriminoManager.changeDebugMode()
 
 
 }
 
 }
-
-
    }
 
 Item{
 focus : true
 Keys.onSpacePressed:  {
-        TetriminoManager.startGame()
+
     }
 }
 }
