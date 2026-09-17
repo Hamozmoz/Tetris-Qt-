@@ -13,6 +13,7 @@ property real tileHeight :height /rows
 Repeater{
     model : TetriminoManager.GameGrid
 Rectangle{
+id : tile
     objectName: "GameTile : " + index
     property int currentrow: Math.floor(index/gamegridroot.columns)
     property int currentcolumn : index % gamegridroot.columns
@@ -22,15 +23,40 @@ Rectangle{
              (model.Color === GameMatrix.Purple|| model.Color === GameMatrix.TetrePurple)? "#e79aff":
              "#90ee90"
     }
+    opacity: model.Transperancy === GameMatrix.Opaque? 1:0.5
+        border.color: model.Color === GameMatrix.Null? "#242323": "white"
+        border.width:width >32 ? width / 32 : 1
+        width : tileWidth
+        height : tileHeight
+        x : width * currentcolumn
+        y : height * currentrow
+    Loader {
+active : TetriminoManager.DebugMode?true:false
+anchors.fill: tile
 
-    border.color: model.Color === GameMatrix.Null? "#242323": "white"
-    border.width:width >32 ? width / 32 : 1
-    width : tileWidth
-    height : tileHeight
-    x : width * currentcolumn
-    y : height * currentrow
+sourceComponent: MouseArea{
+ anchors.fill: parent
+onReleased: {
+        TetriminoManager.changeTileColor(index)
 }
 }
+        }
+
+
+
+}
+}
+
+Button{
+ x : gamegridroot.width
+ y : tileHeight *3
+    active: TetriminoManager.DebugMode?true:false
+    text : "LineCheck"
+    onButtonReleased: {
+        TetriminoManager.checkLines()
+    }
+}
+
 Item{
     focus : true
     Keys.onPressed:  (event)=> {
@@ -50,6 +76,8 @@ Item{
 Keys.onReleased: (event)=> {
                      if((event.key === Qt.Key_Down || event.key === Qt.Key_S) && !event.isAutoRepeat){
             TetriminoManager.changeFastDropToFalse()
+                     }else if(event.key ===Qt.Key_Escape){
+                         GameManager.changeGamePaused()
                      }
 
 
