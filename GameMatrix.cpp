@@ -33,7 +33,7 @@ const int GameMatrix::GetIndex(Position position) const {
 }
 
 int GameMatrix::rowCount(const QModelIndex &parent) const{
-    return Matrix.size();
+    return Matrix.size() -20;
 }
 
 QVariant GameMatrix::data(const QModelIndex &index, int role) const{
@@ -41,12 +41,14 @@ QVariant GameMatrix::data(const QModelIndex &index, int role) const{
         return QVariant();
     }
     if(role == roles::color) {return Matrix[index.row()+ 20];}
+    if(role == roles::transperancy) {return TransperancyMatrix[index.row() +20];}
     return QVariant() ;
 }
 
 QHash<int, QByteArray> GameMatrix::roleNames() const{
     QHash<int,QByteArray> roles;
     roles[roles::color] ="Color";
+    roles[roles::transperancy] = "Transperancy";
     return roles;
 }
 
@@ -91,6 +93,18 @@ void GameMatrix::DataChanged(Position FirstPosition, Position Lastposition){
     dataChanged(First,Last);
 }
 
+void GameMatrix::DataChanged(int index, int index2){
+
+    QModelIndex Index = createIndex(index,0);
+    QModelIndex Index2 ;
+    if( index2 == -1){
+        Index2 = Index;
+    }else{
+        Index2 = createIndex(index2,0);
+    }
+    dataChanged(Index,Index2);
+}
+
 void GameMatrix::PrintMatrix(){
     std::cout << "\033[2J\033[H";
     for(int row {0};row < Rows;row++){
@@ -106,4 +120,9 @@ void GameMatrix::PrintMatrix(){
         std::cout <<std::endl ;
     }
 
+}
+
+void GameMatrix::ResetMatrix(){
+    TransperancyMatrix.fill(Opaque);
+    Matrix.fill(Null);
 }

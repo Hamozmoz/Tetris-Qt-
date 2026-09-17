@@ -29,14 +29,17 @@ class GameMatrix: public QAbstractListModel
 {
     Q_OBJECT
     QML_NAMED_ELEMENT("GameMatrix")
-    enum roles{ color = Qt::UserRole +1 };
+    enum roles{ color = Qt::UserRole +1
+                ,transperancy
+    };
 
     Q_PROPERTY(int columns READ getColumns CONSTANT)
     Q_PROPERTY(int rows READ getRows CONSTANT)
 public:
-    enum Color {Red,Green,Blue,Purple,Null,TetreRed,TetreGreen,TetreBlue,TetrePurple };
+    enum Transperancy :uint8_t{Opaque,Transperant};
+    enum Color :uint8_t{Red,Green,Blue,Purple,Null,TetreRed,TetreGreen,TetreBlue,TetrePurple };
     Q_ENUM(Color)
-
+    Q_ENUM(Transperancy)
     GameMatrix();
    const int GetIndex(int row,int col)const;
     const int GetIndex(Position position)const;
@@ -49,9 +52,20 @@ public:
    Color& operator[](Position Pos) ;
     Q_INVOKABLE void getColor(int index,Color);
     void DataChanged(Position FirstPosition,Position Lastposition);
+    void DataChanged(int index , int index2 = -1);
     void PrintMatrix();
+    void ResetMatrix();
+    std::array<Transperancy,Rows*Columns> TransperancyMatrix;
 private:
     std::array<Color,Rows*Columns> Matrix;
-};
 
+};
+inline GameMatrix::Color& operator--(GameMatrix::Color& color){
+    if(color != GameMatrix::Red){
+        color =  static_cast<GameMatrix::Color>(static_cast<int>(color -1));
+    }else{
+        color = GameMatrix::Null;
+    }
+    return color;
+}
 #endif // GAMEMATRIX_H
