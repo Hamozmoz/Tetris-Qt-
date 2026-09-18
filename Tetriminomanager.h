@@ -27,7 +27,6 @@ public:
     int Score{0};
     bool DebugMode{false};
     bool FastDrop{false};
-    bool InstantDrop{false};
     std::array<Position,4> FinalDropPosition;
     Tetrimino CurrentTetrimino ;
     QChronoTimer* FrameTimer ;
@@ -41,7 +40,6 @@ public:
    Q_INVOKABLE void moveDown();
    Q_INVOKABLE void startGame();
    Q_INVOKABLE void changeFastDropToTrue();
-   Q_INVOKABLE void changeInstantDrop();
    Q_INVOKABLE void changeFastDropToFalse();
    Q_INVOKABLE void rotateTetrimino();
    Q_INVOKABLE void changeDebugMode();
