@@ -46,6 +46,7 @@ public:
    Q_INVOKABLE void checkLines();
    Q_INVOKABLE void changeTileColor(int index);
    Q_INVOKABLE void exitGame();
+   Q_INVOKABLE void instantDrop();
    signals :
    void ScoreChanged();
    void DebugModeChanged();
@@ -68,7 +69,6 @@ void CalculateFinalDropPositon();
  inline void RestartTetriminoTimer();
  void rotateTetrimino(Rotation GoalRotation);
 void SetTetrimino();
-
 std::array<TetriminoType,7> TetriminoBag;
 std::array<LineState,Rows-2> LineStates;
     GameMatrix GameGrid;

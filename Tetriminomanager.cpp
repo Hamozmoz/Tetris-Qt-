@@ -281,6 +281,22 @@ void TetriminoManager::exitGame(){
     reset();
 }
 
+void TetriminoManager::instantDrop()
+{
+    Position FirstPos = CurrentTetrimino.Positions[0];
+    Position Empty {};
+    for(int i {0};i <FinalDropPosition.size();++i){
+        if(FinalDropPosition[i] != Empty){
+            GameGrid[CurrentTetrimino.Positions[i]] = GameMatrix::Null;
+            CurrentTetrimino.Positions[i] = FinalDropPosition[i];
+            GameGrid.TransperancyMatrix[GameGrid.GetIndex(FinalDropPosition[i])] = GameMatrix::Opaque;
+            FinalDropPosition[i] = Empty;
+        }
+    }
+    Position LastPos = CurrentTetrimino.Positions[3];
+    GameGrid.DataChanged(FirstPos,LastPos);
+}
+
 
 void TetriminoManager::CalculateFinalDropPositon(){
 

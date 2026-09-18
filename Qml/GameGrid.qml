@@ -71,7 +71,9 @@ Item{
                              TetriminoManager.changeFastDropToTrue()
                           }else if (event.key === Qt.Key_Up || event.key === Qt.Key_W){
                                TetriminoManager.rotateTetrimino()
-                             }
+                         }else if (event.key === Qt.Key_Space){
+                             TetriminoManager.instantDrop()
+                         }
                      }
 Keys.onReleased: (event)=> {
                      if((event.key === Qt.Key_Down || event.key === Qt.Key_S) && !event.isAutoRepeat){
