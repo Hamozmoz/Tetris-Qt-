@@ -103,6 +103,13 @@ Rectangle{
     }
 
 }
+GameOverScreen{
+    active : TetriminoManager.GameOver?true:false
+    height: gamegridroot.tileHeight*9
+    width: gamegridroot.tileWidth*6
+    anchors.centerIn: gamegridroot
+}
+
 
 }
 
