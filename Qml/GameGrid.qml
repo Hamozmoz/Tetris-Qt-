@@ -56,9 +56,17 @@ Button{
         TetriminoManager.checkLines()
     }
 }
-
+Button{
+ x : gamegridroot.width
+ y : tileHeight *18
+    active: TetriminoManager.DebugMode?true:false
+    text : "Exit"
+    onButtonReleased: {
+        TetriminoManager.exitGame()
+    }
+}
 Item{
-    focus : TetriminoManager.DebugMode?false:true
+    focus : (TetriminoManager.DebugMode || TetriminoManager.GameOver)?false:true
     Keys.onPressed:  (event)=> {
                          if(event.key === Qt.Key_Left || event.key === Qt.Key_A){
                              TetriminoManager.moveTetrimino(TetriminoManager.Left)
