@@ -130,9 +130,6 @@ void TetriminoManager::changeFastDropToTrue(){
     FastDrop = true;
 }
 
-void TetriminoManager::changeInstantDrop(){
-    InstantDrop = !InstantDrop;
-}
 
 void TetriminoManager::changeFastDropToFalse(){
     FastDrop = false;
@@ -242,7 +239,6 @@ void TetriminoManager::reset(){
     DebugMode = false;
     emit DebugModeChanged();
     FastDrop = false;
-    InstantDrop = false;
     Tetrimino Empty ;
     CurrentTetrimino = Empty;
     FinalDropPosition = Empty.Positions;
@@ -412,10 +408,6 @@ void TetriminoManager::GameLoop()
     if(CurrentFrame % 60 == 0 && !FastDrop){
         moveDown();
 
-    }
-    if(InstantDrop){
-        moveDown();
-        InstantDrop = false;
     }
     if(CurrentFrame == 60 ){
         if(!CanMoveDown && !TetriminoTimer->isActive()){
