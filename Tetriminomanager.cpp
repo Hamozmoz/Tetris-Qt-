@@ -88,8 +88,11 @@ void TetriminoManager::addTetriminoToGameGrid(){
     CurrentTetrimino = Tetrimino{CurrentType,Position{1,5},RandomColor};
 
     for(int i {1} ; i< 4 ; ++i){
-        GameGrid[GameGrid.GetIndex(CurrentTetrimino.Positions[i])] = CurrentTetrimino.Color;
-
+    if(GameGrid[CurrentTetrimino.Positions[i]] < 4){
+        loseGame();
+        break;
+}
+        GameGrid[CurrentTetrimino.Positions[i]] = CurrentTetrimino.Color;
     }
     Position PreviousPosition = CurrentTetrimino.Positions[0];
     if(PreviousPosition.row < 2){
@@ -241,12 +244,16 @@ void TetriminoManager::reset(){
     FrameTimer->stop();
     TetriminoTimer->stop();
     DebugMode = false;
+    Score = 0;
     emit DebugModeChanged();
+    emit ScoreChanged();
     FastDrop = false;
     Tetrimino Empty ;
     CurrentTetrimino = Empty;
     FinalDropPosition = Empty.Positions;
     CanMoveDown  = false;
+    GameOver = false;
+    emit GameOverChanged();
     GameGrid.ResetMatrix();
 }
 
@@ -287,7 +294,7 @@ void TetriminoManager::exitGame(){
 
 void TetriminoManager::instantDrop()
 {
-    Position FirstPos = CurrentTetrimino.Positions[0];
+     Position FirstPos = CurrentTetrimino.Positions[0];
     Position Empty {};
     for(int i {0};i <FinalDropPosition.size();++i){
         if(FinalDropPosition[i] != Empty){
@@ -301,6 +308,13 @@ void TetriminoManager::instantDrop()
     GameGrid.DataChanged(FirstPos,LastPos);
     SetTetrimino();
 
+}
+
+void TetriminoManager::loseGame(){
+    FrameTimer->stop();
+    TetriminoTimer->stop();
+    GameOver = true;
+    emit GameOverChanged();
 }
 
 
@@ -730,15 +744,15 @@ void TetriminoManager::changeDebugMode(){
     emit DebugModeChanged();
 }
 void TetriminoManager::SetTetrimino(){
-    GameMatrix::Color TileColor = CurrentTetrimino.Color == GameMatrix::TetreBlue? GameMatrix::Blue:
+     GameMatrix::Color TileColor = CurrentTetrimino.Color == GameMatrix::TetreBlue? GameMatrix::Blue:
                                       CurrentTetrimino.Color == GameMatrix::TetreGreen? GameMatrix::Green:
                                       CurrentTetrimino.Color == GameMatrix::TetreRed? GameMatrix::Red:
                                       CurrentTetrimino.Color == GameMatrix::TetrePurple?GameMatrix::Purple:
                                       GameMatrix::Null;
 
+
     for(auto pos : CurrentTetrimino.Positions){
         GameGrid[pos]= TileColor;
-
     }
     GameGrid.DataChanged(CurrentTetrimino.Positions[0],CurrentTetrimino.Positions[3]);
     FinalDropPosition.fill({0,0});
