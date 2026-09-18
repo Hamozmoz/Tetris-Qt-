@@ -295,16 +295,27 @@ void TetriminoManager::instantDrop()
     }
     Position LastPos = CurrentTetrimino.Positions[3];
     GameGrid.DataChanged(FirstPos,LastPos);
+    SetTetrimino();
+
 }
+
 
 
 void TetriminoManager::CalculateFinalDropPositon(){
 
-
     for(int i {0};i< FinalDropPosition.size();++i){
         GameGrid.TransperancyMatrix[GameGrid.GetIndex(FinalDropPosition[i])] = GameMatrix::Opaque;
+        bool CantRemoveIndex{false};
+        for(auto Pos : CurrentTetrimino.Positions){
+            if(Pos == FinalDropPosition[i]){
+                CantRemoveIndex = true;
+            }
+        }
+        if(!CantRemoveIndex){
         GameGrid[FinalDropPosition[i]] = GameMatrix::Null;
-    };
+        }
+    }
+
     GameGrid.DataChanged(FinalDropPosition[0],FinalDropPosition[3]);
 
     FinalDropPosition = CurrentTetrimino.Positions;
@@ -315,17 +326,16 @@ void TetriminoManager::CalculateFinalDropPositon(){
 
 
     }
-    for(auto Pos : CurrentTetrimino.Positions){
-        for(int i{0}; i<FinalDropPosition.size();++i)
-        if(FinalDropPosition[i] == Pos){
-            FinalDropPosition[i].row = 0;
-            FinalDropPosition[i].column =0;
-            break;
-        }
-
-    }
 for(int i {0};i<FinalDropPosition.size();++i){
+        bool CantMakeIndexTransperant{false};
+        for(auto Pos : CurrentTetrimino.Positions){
+        if(Pos == FinalDropPosition[i]){
+                CantMakeIndexTransperant= true;
+            }
+        }
+        if(!CantMakeIndexTransperant){
         GameGrid.TransperancyMatrix[GameGrid.GetIndex(FinalDropPosition[i])]= GameMatrix::Transperant;
+        }
         GameGrid[FinalDropPosition[i]] = CurrentTetrimino.Color;
     }
     GameGrid.DataChanged(FinalDropPosition[0],FinalDropPosition[3]);
@@ -354,11 +364,11 @@ void TetriminoManager::moveDown(){
             ++CurrentTetrimino.Positions[i].row;
             GameGrid[CurrentTetrimino.Positions[i]] = CurrentTetrimino.Color;
         }
-        TurnCurPosOpaque();
 
         if(TetriminoTimer->isActive()){
             TetriminoTimer->stop();
         }
+        TurnCurPosOpaque();
         GameGrid.DataChanged(PreviousPosition,CurrentTetrimino.Positions[3]);
     }
 
@@ -434,23 +444,12 @@ void TetriminoManager::GameLoop()
 }
 
 void TetriminoManager::TurnCurPosOpaque(){
-    Position FirstPos = min(FinalDropPosition[0],CurrentTetrimino.Positions[0]);
-    Position LastPos = max(FinalDropPosition[3],CurrentTetrimino.Positions[3]);
     for(auto Pos : CurrentTetrimino.Positions){
-        if(GameGrid.TransperancyMatrix[GameGrid.GetIndex(Pos)] == GameMatrix::Transperant){
         GameGrid.TransperancyMatrix[GameGrid.GetIndex(Pos)] = GameMatrix::Opaque;
-            for(int i {0} ; i< FinalDropPosition.size();++i){
-            if(FinalDropPosition[i] == Pos){
-                FinalDropPosition[i].column = 0;
-                FinalDropPosition[i].row = 0;
-                break;
-            }
-            }
+    }
 
-        }
-        }
-    GameGrid.DataChanged(FirstPos,LastPos);
 }
+
 
 TetriminoManager::TetriminoManager(){
     using namespace std::chrono_literals;
@@ -715,7 +714,6 @@ if(CanRotate(TestTetrimino)){
             TetriminoTimer->stop();
         }
     }
-TurnCurPosOpaque();
 CalculateFinalDropPositon();
 
 }
@@ -738,6 +736,7 @@ void TetriminoManager::SetTetrimino(){
         GameGrid[pos]= TileColor;
 
     }
+    GameGrid.DataChanged(CurrentTetrimino.Positions[0],CurrentTetrimino.Positions[3]);
     FinalDropPosition.fill({0,0});
     checkLines();
     addTetriminoToGameGrid();
