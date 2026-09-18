@@ -58,7 +58,7 @@ Button{
 }
 
 Item{
-    focus : true
+    focus : TetriminoManager.DebugMode?false:true
     Keys.onPressed:  (event)=> {
                          if(event.key === Qt.Key_Left || event.key === Qt.Key_A){
                              TetriminoManager.moveTetrimino(TetriminoManager.Left)
