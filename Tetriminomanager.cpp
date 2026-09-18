@@ -108,6 +108,10 @@ int TetriminoManager::readScore(){
     return Score;
 }
 
+const bool TetriminoManager::readGameOver() const {
+    return GameOver;
+}
+
 const bool TetriminoManager::readDebugMode() const {
     return DebugMode;
 }

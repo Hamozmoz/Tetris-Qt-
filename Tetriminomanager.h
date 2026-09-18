@@ -11,6 +11,7 @@ class TetriminoManager : public QObject
     Q_PROPERTY(GameMatrix* GameGrid READ getGameGrid CONSTANT)
     Q_PROPERTY(int Score READ readScore NOTIFY ScoreChanged)
     Q_PROPERTY(bool DebugMode READ readDebugMode NOTIFY DebugModeChanged)
+    Q_PROPERTY(bool GameOver READ readGameOver NOTIFY GameOverChanged)
 public:
     enum Direction: uint8_t{
     Null,
@@ -25,6 +26,7 @@ public:
 
     Q_ENUM(Direction)
     int Score{0};
+    bool GameOver{false};
     bool DebugMode{false};
     bool FastDrop{false};
     std::array<Position,4> FinalDropPosition;
@@ -34,6 +36,7 @@ public:
     static TetriminoManager& Instance();
     GameMatrix* getGameGrid();
     int readScore();
+    const bool readGameOver()const;
     const bool readDebugMode()const;
    Q_INVOKABLE  void moveTetrimino(Direction dir);
    Q_INVOKABLE   void addTetriminoToGameGrid();
@@ -50,6 +53,7 @@ public:
    signals :
    void ScoreChanged();
    void DebugModeChanged();
+   void GameOverChanged();
  private:
    void ClearLine();
      void WallKick(Tetrimino &TetriminoToTest);
