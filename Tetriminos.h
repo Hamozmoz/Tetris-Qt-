@@ -20,15 +20,8 @@ enum Rotation:uint8_t{
     Left,
     None
 };
-   inline Rotation& operator++(Rotation& rotation){
-        if(rotation != Left){
-        rotation = static_cast<Rotation>(rotation+1);
-        }
-        else{
-            rotation = Up;
-        }
-        return rotation;
-    }
+   Rotation& operator++(Rotation& rotation);
+   TetriminoType& operator++(TetriminoType& TetType);
 
 struct Tetrimino{
     std::array<Position,4> Positions;
