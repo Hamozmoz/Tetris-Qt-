@@ -54,3 +54,21 @@ Tetrimino::Tetrimino(const TetriminoType &type, const Position &Baseposition, Ga
         Positions[3].row = Baseposition.row+2;
     }
 }
+TetriminoType &operator++(TetriminoType &TetType){
+    if(TetType != ZPiece){
+        TetType = static_cast<TetriminoType>(static_cast<int>(TetType) +1);
+    }else {
+        TetType =LPiece;
+    }
+    return TetType;
+}
+
+Rotation &operator++(Rotation &rotation){
+    if(rotation != Left){
+        rotation = static_cast<Rotation>(rotation+1);
+    }
+    else{
+        rotation = Up;
+    }
+    return rotation;
+}
