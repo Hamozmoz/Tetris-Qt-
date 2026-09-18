@@ -33,9 +33,8 @@ if(dir == Direction::Left){
     GameGrid.DataChanged(CurrentTetrimino.Positions[0],PreviousPos);
     CheckCanMoveDown();
     TurnCurPosOpaque();
-    if(CanMoveDown){
     CalculateFinalDropPositon();
-    }
+
     RestartTetriminoTimer();
     }else if(dir == Direction::Right){
     Position PreviousPos = CurrentTetrimino.Positions[0];
@@ -58,9 +57,8 @@ if(dir == Direction::Left){
     GameGrid.DataChanged(PreviousPos,CurrentTetrimino.Positions[3]);
     CheckCanMoveDown();
     TurnCurPosOpaque();
-    if(CanMoveDown){
     CalculateFinalDropPositon();
-    }}
+    }
     RestartTetriminoTimer();
 
 
