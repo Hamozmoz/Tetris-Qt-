@@ -157,7 +157,7 @@ void TetriminoManager::ClearLine(){
     int ScoreToAdd{0};
    int LinesToClear = 0;
     bool LinesCleared {false};
-    for(int row = LineStates.size() -1; row>1;--row){
+    for(int row = LineStates.size() -1; row>-1;--row){
        if(LineStates[row] == LineCleared){
             ++LinesToClear;
            for(int col = 0 ; col < Columns; ++col){
@@ -174,8 +174,10 @@ void TetriminoManager::ClearLine(){
                for(int col = 0;col < Columns ; ++col){
                    std::swap(GameGrid[GameGrid.GetIndex(row+2,col)],GameGrid[GameGrid.GetIndex(row+2+LinesToClear,col)]);
 
-               }}
+               }
                LinesCleared = true;
+               }
+
            }
        }
 
