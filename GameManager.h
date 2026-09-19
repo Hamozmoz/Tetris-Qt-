@@ -2,6 +2,7 @@
 #define GAMEMANAGER_H
 #include <QObject>
 #include <QQmlEngine>
+#include <qguiapplication.h>
 class GameManager: public QObject
 {
     Q_OBJECT
@@ -15,6 +16,7 @@ public:
     };
     Q_ENUM(GameState)
     Q_INVOKABLE void changeGamePaused();
+    Q_INVOKABLE void quitGame();
     GameState CurrentGameState = GameState::OpeningScreen;
    static GameManager& Instance ();
     GameState GetGameState();

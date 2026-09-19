@@ -79,6 +79,16 @@ onButtonClicked: {
 }
 
 }
+Button {
+id :quitButton
+text: "Quit"
+anchors.horizontalCenter: blackBackground.horizontalCenter
+y : blackBackground.screenPieceHeight *26
+onButtonClicked: {
+GameManager.quitGame()
+}
+}
+
 Button{
 active: GameManager.DebugMode? true:false
 x : 0
@@ -95,10 +105,5 @@ TetriminoManager.changeDebugMode()
 }
    }
 
-Item{
-focus : true
-Keys.onSpacePressed:  {
 
-    }
-}
 }

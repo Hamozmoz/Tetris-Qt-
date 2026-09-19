@@ -13,6 +13,10 @@ void GameManager::changeGamePaused(){
 
 }
 
+void GameManager::quitGame(){
+    QGuiApplication::exit();
+}
+
 GameManager &GameManager::Instance() {
     static GameManager manager;
     return manager;
