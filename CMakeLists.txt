@@ -25,6 +25,7 @@ qt_add_qml_module(appTetris
         Qml/Button.qml
         Qml/PauseScreen.qml
         Qml/OpeningScreen.qml
+        Qml/GameOverScreen.qml
     SOURCES
      GameManager.h
      GameManager.cpp
@@ -34,6 +35,7 @@ qt_add_qml_module(appTetris
      Tetriminomanager.cpp
      Tetriminos.h
      Tetriminos.cpp
+
 
 )
 
