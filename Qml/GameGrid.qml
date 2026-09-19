@@ -48,25 +48,69 @@ onReleased: {
 }
 
 Button{
- x : gamegridroot.width
+id : lineCheckButton
+active: TetriminoManager.DebugMode?true:false
+anchors.left: gamegridroot.right
  y : tileHeight *3
-    active: TetriminoManager.DebugMode?true:false
+
     text : "LineCheck"
     onButtonReleased: {
         TetriminoManager.checkLines()
     }
 }
 Button{
+id : exitButton
+active: TetriminoManager.DebugMode?true:false
  x : gamegridroot.width
  y : tileHeight *18
-    active: TetriminoManager.DebugMode?true:false
+
     text : "Exit"
     onButtonReleased: {
         TetriminoManager.exitGame()
     }
 }
+Button{
+id: changeTetriminoTypeButton
+active : TetriminoManager.DebugMode?true:false
+property string currentType : "IPiece"
+text: currentType
+anchors.right: gamegridroot.left
+y : tileHeight *3
+onButtonClicked: {
+TetriminoManager.changeDebugTetrimino()
+if(currentType == "IPiece"){
+currentType = "OPiece"
+}else if(currentType == "OPiece"){
+currentType = "SPiece"
+}else if(currentType == "SPiece"){
+currentType = "JPiece"
+}else if(currentType == "JPiece"){
+currentType = "TPiece"
+}else if(currentType == "TPiece"){
+currentType = "ZPiece"
+}else if(currentType == "ZPiece"){
+currentType = "LPiece"
+}else if(currentType == "LPiece"){
+currentType = "IPiece"
+}
+}
+
+}
+Button {
+id : spawnTetriminoButton
+active : TetriminoManager.DebugMode?true:false
+text :"Spawn"
+anchors.right: gamegridroot.left
+y : tileHeight * 6
+
+onButtonClicked: {
+if(!TetriminoManager.TetriminoSpawned){
+TetriminoManager.addTetriminoToGameGrid()
+}}
+}
+
 Item{
-    focus : (TetriminoManager.DebugMode || TetriminoManager.GameOver)?false:true
+    focus : ((TetriminoManager.DebugMode && !TetriminoManager.TetriminoSpawned) || TetriminoManager.GameOver)?false:true
     Keys.onPressed:  (event)=> {
                          if(event.key === Qt.Key_Left || event.key === Qt.Key_A){
                              TetriminoManager.moveTetrimino(TetriminoManager.Left)

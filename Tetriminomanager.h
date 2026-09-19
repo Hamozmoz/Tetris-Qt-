@@ -12,6 +12,7 @@ class TetriminoManager : public QObject
     Q_PROPERTY(int Score READ readScore NOTIFY ScoreChanged)
     Q_PROPERTY(bool DebugMode READ readDebugMode NOTIFY DebugModeChanged)
     Q_PROPERTY(bool GameOver READ readGameOver NOTIFY GameOverChanged)
+    Q_PROPERTY(bool TetriminoSpawned READ readTetriminoSpawned NOTIFY TetriminoSpawnedChanged)
 public:
     enum Direction: uint8_t{
     Null,
@@ -29,6 +30,7 @@ int Score{0};
 bool GameOver{false};
 bool DebugMode{false};
 bool FastDrop{false};
+bool TetriminoSpawned{false};
 std::array<Position,4> FinalDropPosition;
 Tetrimino CurrentTetrimino ;
 QChronoTimer* FrameTimer ;
@@ -36,6 +38,7 @@ QChronoTimer* TetriminoTimer ;
 static TetriminoManager& Instance();
 GameMatrix* getGameGrid();
 int readScore();
+const bool readTetriminoSpawned()const;
 const bool readGameOver()const;
 const bool readDebugMode()const;
 Q_INVOKABLE  void moveTetrimino(Direction dir);
@@ -50,11 +53,12 @@ Q_INVOKABLE void checkLines();
 Q_INVOKABLE void changeTileColor(int index);
 Q_INVOKABLE void exitGame();
 Q_INVOKABLE void instantDrop();
-
+Q_INVOKABLE void changeDebugTetrimino();
  signals :
 void ScoreChanged();
 void DebugModeChanged();
 void GameOverChanged();
+void TetriminoSpawnedChanged();
  private:
 void ClearLine();
 void WallKick(Tetrimino &TetriminoToTest);
@@ -78,6 +82,8 @@ void SetTetrimino();
 std::array<TetriminoType,7> TetriminoBag;
 std::array<LineState,Rows-2> LineStates;
 GameMatrix GameGrid;
+TetriminoType DebugModeTetriminoType {IPiece};
+
 };
 Position max(Position pos1,Position pos2);
 Position min(Position pos1,Position pos2);

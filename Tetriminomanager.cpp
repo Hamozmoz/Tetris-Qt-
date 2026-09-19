@@ -84,6 +84,14 @@ void TetriminoManager::addTetriminoToGameGrid(){
         }
         InitTetriminoBag();
     }
+    #ifndef NDEBUG
+    if(DebugMode){
+    CurrentType = DebugModeTetriminoType;
+    }
+    TetriminoSpawned = true;
+    emit TetriminoSpawnedChanged();
+    FrameTimer->start();
+    #endif
     GameMatrix::Color RandomColor = static_cast<GameMatrix::Color>(RandomColorDistributer(ColorGen));
     CurrentTetrimino = Tetrimino{CurrentType,Position{1,5},RandomColor};
 
@@ -109,6 +117,10 @@ GameMatrix *TetriminoManager::getGameGrid(){
 
 int TetriminoManager::readScore(){
     return Score;
+}
+
+const bool TetriminoManager::readTetriminoSpawned() const{
+    return TetriminoSpawned;
 }
 
 const bool TetriminoManager::readGameOver() const {
@@ -308,6 +320,10 @@ void TetriminoManager::instantDrop()
     GameGrid.DataChanged(FirstPos,LastPos);
     SetTetrimino();
 
+}
+
+void TetriminoManager::changeDebugTetrimino(){
+    ++DebugModeTetriminoType;
 }
 
 void TetriminoManager::loseGame(){
@@ -756,10 +772,23 @@ void TetriminoManager::SetTetrimino(){
     }
     GameGrid.DataChanged(CurrentTetrimino.Positions[0],CurrentTetrimino.Positions[3]);
     FinalDropPosition.fill({0,0});
+    #ifndef NDEBUG
+    if(DebugMode){
+    TetriminoSpawned = false;
+    emit TetriminoSpawnedChanged();
+    return;
+    }
+    #endif
     checkLines();
     addTetriminoToGameGrid();
 
 }
+
+
+#ifndef NDEBUG
+
+
+#endif
 //Checks Which Position Is Last In The Matrix
 Position max(Position pos1, Position pos2){
     if((pos1.row *Columns + pos1.column) >(pos2.row * Columns + pos2.column)){
