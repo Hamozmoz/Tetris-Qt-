@@ -335,6 +335,8 @@ void TetriminoManager::instantDrop()
         }
     }
     Position LastPos = CurrentTetrimino.Positions[3];
+    Score += (CurrentTetrimino.Positions[0].row-FirstPos.row) *2;
+    emit ScoreChanged();
     GameGrid.DataChanged(FirstPos,LastPos);
     SetTetrimino();
 

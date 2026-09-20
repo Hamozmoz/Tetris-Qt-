@@ -26,7 +26,7 @@ public:
     };
 
 Q_ENUM(Direction)
-int Score{0};
+uint Score{0};
 bool GameOver{false};
 bool DebugMode{false};
 bool FastDrop{false};
