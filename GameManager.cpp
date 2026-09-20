@@ -31,15 +31,15 @@ void GameManager::ChangeGameState(GameState State){
     }
 }
 
-const bool GameManager::readDebugMode() const{
+bool GameManager::readDebugMode() const{
     return DebugMode;
 }
 
-const bool GameManager::readGamePaused() const {
+bool GameManager::readGamePaused() const {
     return GamePaused;
 }
 
-const uint GameManager::readHighScore() const {
+uint GameManager::readHighScore() const {
     return HighScore;
 }
 
