@@ -165,6 +165,16 @@ GameOverScreen{
     width: gamegridroot.tileWidth*6
     anchors.centerIn: gamegridroot
 }
+DisplayBox{
+id : heldTetriminoBox
+title : "Hold"
+anchors.right: gamegridroot.left
+y :gamegridroot.height/2
+width : gamegridroot.tileWidth *3
+height: gamegridroot.tileHeight *5
+tetriminoColor: TetriminoManager.HeldColor
+tetriminoType: TetriminoManager.HeldType
+}
 
 
 }
