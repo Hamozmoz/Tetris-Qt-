@@ -20,11 +20,11 @@ public:
     Q_INVOKABLE void quitGame();
     GameState CurrentGameState = GameState::OpeningScreen;
    static GameManager& Instance ();
-    GameState GetGameState();
     void ChangeGameState(GameState State);
-    const bool readDebugMode() const;
-    const bool readGamePaused() const;
-    const uint readHighScore()const;
+    GameState GetGameState();
+    bool readDebugMode()const;
+    bool readGamePaused()const;
+    uint readHighScore()const;
     uint HighScore{0};
 signals :
 void GameStateChanged();
@@ -35,7 +35,7 @@ bool GamePaused{false};
 bool DebugMode {false};
     GameManager();
 void ReadDataFile();
-void WriteToDataFile();;
+void WriteToDataFile();
 
 };
 
