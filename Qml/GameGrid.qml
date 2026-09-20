@@ -130,7 +130,11 @@ Item{
 Keys.onReleased: (event)=> {
                      if((event.key === Qt.Key_Down || event.key === Qt.Key_S) && !event.isAutoRepeat){
             TetriminoManager.changeFastDropToFalse()
-                     }else if(event.key ===Qt.Key_Escape){
+                     }else if(event.key === Qt.Key_C)
+                     {
+                     TetriminoManager.holdTetrimino()
+                     }
+                     else if(event.key ===Qt.Key_Escape){
                          GameManager.changeGamePaused()
                      }
 
