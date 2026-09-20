@@ -13,6 +13,8 @@ class TetriminoManager : public QObject
     Q_PROPERTY(bool DebugMode READ readDebugMode NOTIFY DebugModeChanged)
     Q_PROPERTY(bool GameOver READ readGameOver NOTIFY GameOverChanged)
     Q_PROPERTY(bool TetriminoSpawned READ readTetriminoSpawned NOTIFY TetriminoSpawnedChanged)
+    Q_PROPERTY(uint HeldType READ readHeldType NOTIFY HeldChanged)
+    Q_PROPERTY(QString HeldColor READ readHeldColor NOTIFY HeldChanged)
 public:
     enum Direction: uint8_t{
     Null,
@@ -38,9 +40,11 @@ QChronoTimer* TetriminoTimer ;
 static TetriminoManager& Instance();
 GameMatrix* getGameGrid();
 int readScore();
+uint readHeldType();
 bool readTetriminoSpawned()const;
 bool readGameOver()const;
 bool readDebugMode()const;
+QString readHeldColor();
 Q_INVOKABLE  void moveTetrimino(Direction dir);
 Q_INVOKABLE   void addTetriminoToGameGrid();
 Q_INVOKABLE void startGame();
@@ -59,6 +63,7 @@ void ScoreChanged();
 void DebugModeChanged();
 void GameOverChanged();
 void TetriminoSpawnedChanged();
+void HeldChanged();
 private:
 Tetrimino HeldTetrimino;
 bool CanHoldTetrimino{true};

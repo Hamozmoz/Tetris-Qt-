@@ -119,6 +119,11 @@ int TetriminoManager::readScore(){
     return Score;
 }
 
+uint TetriminoManager::readHeldType(){
+uint typeNumber = static_cast<uint>(HeldTetrimino.Type);
+return typeNumber;
+}
+
 
 bool TetriminoManager::readTetriminoSpawned() const{
     return TetriminoSpawned;
@@ -130,6 +135,20 @@ bool TetriminoManager::readGameOver() const {
 
 bool TetriminoManager::readDebugMode() const {
     return DebugMode;
+}
+
+QString TetriminoManager::readHeldColor(){
+    if(HeldTetrimino.Color == GameMatrix::TetreRed){
+        return "#c71585";
+    }else if(HeldTetrimino.Color == GameMatrix::TetreBlue){
+        return "royalblue";
+    }else if(HeldTetrimino.Color == GameMatrix::TetrePurple){
+        return "#e79aff";
+    }else if(HeldTetrimino.Color == GameMatrix::TetreGreen){
+        return "#90ee90";
+    }else {
+        return "black";
+    }
 }
 
 void TetriminoManager::startGame(){
@@ -368,6 +387,7 @@ return;
     addTetriminoToGameGrid(CurrentTetrimino);
 
     }
+    emit HeldChanged();
     CanHoldTetrimino = false;
 }
 
