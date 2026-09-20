@@ -156,32 +156,23 @@ void TetriminoManager::changeFastDropToFalse(){
 void TetriminoManager::ClearLine(){
     int ScoreToAdd{0};
    int LinesToClear = 0;
-    bool LinesCleared {false};
     for(int row = LineStates.size() -1; row>-1;--row){
        if(LineStates[row] == LineCleared){
             ++LinesToClear;
            for(int col = 0 ; col < Columns; ++col){
                 GameGrid[GameGrid.GetIndex(row+2,col)] = GameMatrix::Null;
            }
-           if(LinesCleared){
-                LinesCleared = false;
-               ScoreToAdd += LinesToClear * 100;
-               LinesToClear = 0;
-           }
-       }else{
-           if(LinesToClear > 0){
+       }else if(LinesToClear > 0){
                if(LineStates[row] != LineEmpty){
                for(int col = 0;col < Columns ; ++col){
                    std::swap(GameGrid[GameGrid.GetIndex(row+2,col)],GameGrid[GameGrid.GetIndex(row+2+LinesToClear,col)]);
 
                }
-               LinesCleared = true;
                }
 
            }
        }
 
-    }
     ScoreToAdd += LinesToClear * 100;
     Score += ScoreToAdd;
     emit ScoreChanged();
