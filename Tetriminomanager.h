@@ -38,9 +38,9 @@ QChronoTimer* TetriminoTimer ;
 static TetriminoManager& Instance();
 GameMatrix* getGameGrid();
 int readScore();
-const bool readTetriminoSpawned()const;
-const bool readGameOver()const;
-const bool readDebugMode()const;
+bool readTetriminoSpawned()const;
+bool readGameOver()const;
+bool readDebugMode()const;
 Q_INVOKABLE  void moveTetrimino(Direction dir);
 Q_INVOKABLE   void addTetriminoToGameGrid();
 Q_INVOKABLE void moveDown();
@@ -54,13 +54,17 @@ Q_INVOKABLE void changeTileColor(int index);
 Q_INVOKABLE void exitGame();
 Q_INVOKABLE void instantDrop();
 Q_INVOKABLE void changeDebugTetrimino();
+Q_INVOKABLE void holdTetrimino();
  signals :
 void ScoreChanged();
 void DebugModeChanged();
 void GameOverChanged();
 void TetriminoSpawnedChanged();
- private:
+private:
+Tetrimino HeldTetrimino;
+bool CanHoldTetrimino{true};
 void ClearLine();
+void addTetriminoToGameGrid(Tetrimino& Tetrimino);
 void WallKick(Tetrimino &TetriminoToTest);
 Rotation NextRotation();
 void reset();

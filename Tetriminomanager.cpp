@@ -119,15 +119,16 @@ int TetriminoManager::readScore(){
     return Score;
 }
 
-const bool TetriminoManager::readTetriminoSpawned() const{
+
+bool TetriminoManager::readTetriminoSpawned() const{
     return TetriminoSpawned;
 }
 
-const bool TetriminoManager::readGameOver() const {
+bool TetriminoManager::readGameOver() const {
     return GameOver;
 }
 
-const bool TetriminoManager::readDebugMode() const {
+bool TetriminoManager::readDebugMode() const {
     return DebugMode;
 }
 
@@ -166,7 +167,6 @@ void TetriminoManager::ClearLine(){
                if(LineStates[row] != LineEmpty){
                for(int col = 0;col < Columns ; ++col){
                    std::swap(GameGrid[GameGrid.GetIndex(row+2,col)],GameGrid[GameGrid.GetIndex(row+2+LinesToClear,col)]);
-
                }
                }
 
@@ -177,6 +177,26 @@ void TetriminoManager::ClearLine(){
     Score += ScoreToAdd;
     emit ScoreChanged();
     GameGrid.DataChanged({0,0},{Rows-1,Columns-1});
+}
+
+void TetriminoManager::addTetriminoToGameGrid(Tetrimino &Tetrimino)
+{
+    CurrentTetrimino = {Tetrimino.Type,{1,5},Tetrimino.Color};
+    for(int i {1} ; i< 4 ; ++i){
+        if(GameGrid[CurrentTetrimino.Positions[i]] < 4){
+            loseGame();
+            break;
+        }
+        GameGrid[CurrentTetrimino.Positions[i]] = CurrentTetrimino.Color;
+    }
+    Position PreviousPosition = CurrentTetrimino.Positions[0];
+    if(PreviousPosition.row < 2){
+        PreviousPosition.row = 2;
+        PreviousPosition.column = 0;
+    }
+    GameGrid.DataChanged(PreviousPosition,CurrentTetrimino.Positions[3]);
+    CalculateFinalDropPositon();
+
 }
 
 void TetriminoManager::WallKick(Tetrimino &TetriminoToTest){
@@ -322,6 +342,31 @@ void TetriminoManager::instantDrop()
 
 void TetriminoManager::changeDebugTetrimino(){
     ++DebugModeTetriminoType;
+}
+
+void TetriminoManager::holdTetrimino(){
+if(!CanHoldTetrimino){
+return;
+}
+    if(HeldTetrimino.Type == TetriminoType::Null){
+        HeldTetrimino.Type = CurrentTetrimino.Type;
+        HeldTetrimino.Color = CurrentTetrimino.Color;
+        for(auto Pos : CurrentTetrimino.Positions){
+            GameGrid[Pos] = GameMatrix::Null;
+        }
+        GameGrid.DataChanged(CurrentTetrimino.Positions[0],CurrentTetrimino.Positions[3]);
+        addTetriminoToGameGrid();
+    }else {
+
+    for(auto Pos : CurrentTetrimino.Positions){
+            GameGrid[Pos] = GameMatrix::Null;
+        }
+    GameGrid.DataChanged(CurrentTetrimino.Positions[0],CurrentTetrimino.Positions[3]);
+    std::swap(CurrentTetrimino,HeldTetrimino);
+    addTetriminoToGameGrid(CurrentTetrimino);
+
+    }
+    CanHoldTetrimino = false;
 }
 
 void TetriminoManager::loseGame(){
@@ -770,6 +815,7 @@ void TetriminoManager::SetTetrimino(){
     }
     GameGrid.DataChanged(CurrentTetrimino.Positions[0],CurrentTetrimino.Positions[3]);
     FinalDropPosition.fill({0,0});
+    CanHoldTetrimino = true;
     #ifndef NDEBUG
     if(DebugMode){
     TetriminoSpawned = false;
