@@ -446,6 +446,10 @@ void TetriminoManager::moveDown(){
             TetriminoTimer->stop();
         }
         TurnCurPosOpaque();
+        if(FastDrop){
+        Score +=1;
+        emit ScoreChanged();
+        }
         GameGrid.DataChanged(PreviousPosition,CurrentTetrimino.Positions[3]);
     }
 
