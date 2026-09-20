@@ -103,6 +103,35 @@ TetriminoManager.changeDebugMode()
 }
 
 }
+Text{
+visible: GameManager.HighScore >0?true:false
+id : highScoreText
+text : "HighScore : " + GameManager.HighScore
+color : "white"
+x : blackBackground.width - width- width/10
+anchors.bottom: blackBackground.bottom
+font.pixelSize: blackBackground.width/30 +2
+font.family: "consolas"
+SequentialAnimation{
+running: true
+loops : Animation.Infinite
+PropertyAnimation{
+property: "scale"
+target: highScoreText
+from : 1
+to : 1.1
+duration : 600
+}
+PropertyAnimation{
+property: "scale"
+target: highScoreText
+from : 1.1
+to : 1
+duration : 600
+}
+
+}
+}
    }
 
 
