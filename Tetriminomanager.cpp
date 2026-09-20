@@ -258,6 +258,10 @@ void TetriminoManager::reset(){
     FrameTimer->stop();
     TetriminoTimer->stop();
     DebugMode = false;
+    if(Score > GameManager::Instance().HighScore){
+    GameManager::Instance().HighScore = Score;
+    emit GameManager::Instance().HighScoreChanged();
+    }
     Score = 0;
     emit DebugModeChanged();
     emit ScoreChanged();
@@ -303,6 +307,7 @@ void TetriminoManager::changeTileColor(int index){
 
 void TetriminoManager::exitGame(){
     GameManager::Instance().ChangeGameState(GameManager::OpeningScreen);
+
     reset();
 }
 
