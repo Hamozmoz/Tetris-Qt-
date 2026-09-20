@@ -4,13 +4,13 @@
 #include <array>
 #include "GameMatrix.h"
 enum TetriminoType:uint8_t{
-    LPiece,
     IPiece,
-    OPiece,
-    SPiece,
-    JPiece,
     TPiece,
+    LPiece,
+    JPiece,
+    SPiece,
     ZPiece,
+    OPiece,
     Null
 };
 enum Rotation:uint8_t{
