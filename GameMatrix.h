@@ -3,10 +3,8 @@
 #include <QAbstractListModel>
 #include <qqmlintegration.h>
 #include <qtmetamacros.h>
-#define Rows 22
-#define Columns 10
-
-
+constexpr int Rows = 22;
+constexpr int Columns = 10;
 struct Position{
     int8_t column;
     int8_t row;
