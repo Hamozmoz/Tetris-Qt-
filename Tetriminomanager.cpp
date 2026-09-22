@@ -298,9 +298,11 @@ void TetriminoManager::reset(){
     FastDrop = false;
     Tetrimino Empty ;
     CurrentTetrimino = Empty;
+    HeldTetrimino = Empty;
     FinalDropPosition = Empty.Positions;
     CanMoveDown  = false;
     GameOver = false;
+    emit HeldChanged();
     emit GameOverChanged();
     GameGrid.ResetMatrix();
 }
