@@ -170,10 +170,12 @@ id : heldTetriminoBox
 title : "Hold"
 anchors.right: gamegridroot.left
 y :gamegridroot.height/2
-width : gamegridroot.tileWidth *3
+width : gamegridroot.tileWidth *5
 height: gamegridroot.tileHeight *5
 tetriminoColor: TetriminoManager.HeldColor
 tetriminoType: TetriminoManager.HeldType
+tileWidth : gamegridroot.tileWidth
+tileHeight : gamegridroot.tileHeight
 }
 
 
